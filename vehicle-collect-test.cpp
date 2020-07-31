@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include "vehicle.h"
  
 TEST(COLLECT, when_a_vehicle_gets_input_measurements)
 struct input ip {
@@ -7,7 +8,7 @@ struct input ip {
 	.measurement = 30
 };
 
-struct vehicle_input v_ip = get_vehicle_measurement(ip);
+struct vehicle_input vip = get_vehicle_data(ip);
 ASSERT_EQ(vip.ip.id, ip.id, true);
 ASSERT_EQ(vip.ip.key, ip.key, true);
 ASSERT_EQ(vip.ip.measurement, ip.measurement, true);
