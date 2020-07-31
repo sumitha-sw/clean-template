@@ -9,10 +9,10 @@ struct input ip {
 };
 
 struct vehicle_input vip = get_vehicle_data(ip);
-ASSERT_EQ(vip.ip.id, ip.id, true);
-ASSERT_EQ(vip.ip.key, ip.key, true);
-ASSERT_EQ(vip.ip.measurement, ip.measurement, true);
-ASSERT_EQ(vip.stat, VALID, true);
+ASSERT_EQ(vip.ip.id, ip.id);
+ASSERT_EQ(vip.ip.key, ip.key);
+ASSERT_EQ(vip.ip.measurement, ip.measurement);
+ASSERT_EQ(vip.stat, VALID);
 }
 
 int main(int argc, char **argv) {
