@@ -21,7 +21,7 @@ ASSERT_EQ(vip.stat, VALID);
 TEST(COLLECT, format_input_data)
 { 
 	class vehicle obj;
-	struct vehicle_output vop = {0};
+	struct vehicle_output vop;
 	
 	struct input ip = {
 	.id = 2300,
