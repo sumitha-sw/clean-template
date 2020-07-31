@@ -2,14 +2,16 @@
 #include "vehicle.h"
  
 TEST(COLLECT, when_a_vehicle_gets_input_measurements)
-{
+ { 
+	class vehicle obj;
+	
 	struct input ip = {
 	.id = 1000,
 	.key = MOTOR_TEMP,
 	.measurement = 30
         };
 
-struct vehicle_input vip = get_vehicle_data(ip);
+struct vehicle_input vip = obj.get_vehicle_data(ip);
 ASSERT_EQ(vip.ip.id, ip.id);
 ASSERT_EQ(vip.ip.key, ip.key);
 ASSERT_EQ(vip.ip.measurement, ip.measurement);
