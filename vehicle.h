@@ -1,49 +1,47 @@
 #ifndef __VEHICLE_H
 #define __VEHICLE_H
 
-//#include <iostream>
-
 enum InputStatus
 {
-	INVALID = 0,
-	VALID
+	INVALID_FRAME = 0,
+	VALID_FRAME
 };
 
-enum Features
+enum Measures
 {
-	MOTOR_TEMP = 0,
-	BATTERY_TEMP,
+	MOTOR_TEMPERATURE = 0,
+	BATTERY_TEMPERATURE,
 	BATTERY_SOC
 };
 
-struct input
+struct Input_Frame
 {
-	int id;
-	enum Features key;
+	int vehicle_id;
+	enum Measures key;
 	float measurement;
 };
 
 
-struct vehicle_input
+struct Telematics
 {
-	struct input ip;
-	enum InputStatus stat;
+	struct Input_Frame in_frame;
+	enum InputStatus status;
 };
 
-struct vehicle_output
+struct Inventory
 {
-	int id;
-	float motor_temp;
-	float battery_temp;
+	int vehicle_id;
+	float motor_temperature;
+	float battery_temperature;
 	float battery_soc;
 };
 
-class vehicle
+class Vehicle
 {
 
 public:
-struct vehicle_input get_vehicle_data(struct input ip);
-void convert_vehicle_data_into_storage_format(struct vehicle_input vip, struct vehicle_output *vop);
+struct Telematics get_input_message_frame(struct Input_Frame);
+void convert_input_frame_into_output_frame(struct Telematics , struct Inventory *);
 
 };
 
