@@ -2,71 +2,71 @@
 #include "vehicle.h"
 
 
-struct vehicle_input vehicle::get_vehicle_data(struct input ip)
+struct Telematics Vehicle::get_input_message_frame(struct Input_Frame frame)
 {
-	struct vehicle_input vip = {0};
+	struct Telematics message = {0};
 
-	if((ip.id < 1000) || (ip.id > 9999)) {
-		vip.stat = INVALID;
-		return vip;
+	if((frame.vehicle_id < 1000) || (frame.vehicle_id > 9999)) {
+		message.status = INVALID_FRAME;
+		return message;
 	}
 	else
 	{
-		vip.ip.id = ip.id;
+		message.in_frame.vehicle_id = frame.vehicle_id;
 	}
 
-	if((ip.key >= 0) && (ip.key <=2))
+	if((frame.key >= 0) && (frame.key <=2))
 	{
-		vip.ip.key = ip.key;
+		message.in_frame.key = frame.key;
 	}
 	else
 	{
-		vip.stat = INVALID;
-		return vip;
+		message.status = INVALID_FRAME;
+		return message;
 	}
 
-	if((ip.measurement < 0) || (ip.measurement > 100))
+	if((frame.measurement < 0) || (frame.measurement > 100))
 	{
-		vip.stat = INVALID;
-		return vip;
+		message.status = INVALID_FRAME;
+		return message;
 	}
 	else
 	{
-		vip.ip.measurement = ip.measurement;
+		message.in_frame.measurement = frame.measurement;
 	}
 
-	vip.stat = VALID;
+	message.status = VALID_FRAME;
 
-	return vip;
+	return message;
 
 }
 
 
-void vehicle::convert_vehicle_data_into_storage_format(struct vehicle_input vip, struct vehicle_output *vop)
+void Vehicle::convert_input_frame_into_output_frame(struct Telematics message, struct Inventory *output_frame)
 {
 
-	if(vip.stat == VALID) 
+	if(message.status == VALID_FRAME) 
 	{
 	
-	vop->id = vip.ip.id;
+	output_frame->vehicle_id = message.in_frame.vehicle_id;
 	
-	switch(vip.ip.key)
+	switch(message.in_frame.key)
 	{
-		case MOTOR_TEMP:
+		case MOTOR_TEMPERATURE:
 			{
-				vop->motor_temp = vip.ip.measurement;
+				output_frame->motor_temperature = message.in_frame.measurement;
 			}
 			break;
 
-		case BATTERY_TEMP:
+		case BATTERY_TEMPERATURE:
 			{
-				vop->battery_temp = vip.ip.measurement;
+				output_frame->battery_temperature = message.in_frame.measurement;
 			}
 			break;
 
 		case BATTERY_SOC:
 			{
-				vop->battery_soc = vip.ip.measurement;
+				output_frame->battery_soc = message.in_frame.measurement;
 			}
 			break;
 	}

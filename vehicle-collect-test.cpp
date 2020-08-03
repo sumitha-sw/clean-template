@@ -3,41 +3,41 @@
  
 TEST(COLLECT, when_a_vehicle_gets_input_measurements)
 { 
-	class vehicle obj;
+	class Vehicle obj;
 	
-	struct input ip = {
-	.id = 1000,
-	.key = MOTOR_TEMP,
+	struct Input_Frame frame = {
+	.vehicle_id = 1000,
+	.key = MOTOR_TEMPERATURE,
 	.measurement = 30
         };
 
-struct vehicle_input vip = obj.get_vehicle_data(ip);
-ASSERT_EQ(vip.ip.id, ip.id);
-ASSERT_EQ(vip.ip.key, ip.key);
-ASSERT_EQ(vip.ip.measurement, ip.measurement);
-ASSERT_EQ(vip.stat, VALID);
+struct Telematics msg = obj.get_input_message_frame(frame);
+ASSERT_EQ(msg.in_frame.vehicle_id, frame.vehicle_id);
+ASSERT_EQ(msg.in_frame.key, frame.key);
+ASSERT_EQ(msg.in_frame.measurement, frame.measurement);
+ASSERT_EQ(msg.status, VALID_FRAME);
 }
 
 TEST(COLLECT, change_the_input_data_format_to_output_format)
 { 
-	class vehicle obj;
-	struct vehicle_output vop = {0};
+	class Vehicle obj;
+	struct Inventory output_frame = {0};
 	
-	struct input ip = {
-	.id = 2300,
+	struct Input_Frame frame = {
+	.vehicle_id = 2300,
 	.key = BATTERY_TEMP,
 	.measurement = 40
         };
-	struct vehicle_input vip = {
-	.ip = ip,
-	.stat = VALID
+	struct Telematics msg = {
+	.in_frame = in_frame,
+	.status = VALID_FRAME
         };
 
-void obj.convert_vehicle_data_into_storage_format(vip, &vop);
-ASSERT_EQ(vop.id, vip.ip.id);
-ASSERT_EQ(vop.motor_temp, 0);
-ASSERT_EQ(vop.battery_temp, 40);
-ASSERT_EQ(vop.battery_soc, 0);
+void obj.convert_input_frame_into_output_frame(msg, &output_frame);
+ASSERT_EQ(output_frame.vehicle_id, msg.in_frame.vehicle_id);
+ASSERT_EQ(output_frame.motor_temperature, 0);
+ASSERT_EQ(output_frame.battery_temperature, 40);
+ASSERT_EQ(output_frame.battery_soc, 0);
 }
 
 
