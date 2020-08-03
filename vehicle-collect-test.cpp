@@ -2,7 +2,7 @@
 #include "vehicle.h"
  
 TEST(COLLECT, when_a_vehicle_gets_input_measurements)
- { 
+{ 
 	class vehicle obj;
 	
 	struct input ip = {
@@ -18,10 +18,10 @@ ASSERT_EQ(vip.ip.measurement, ip.measurement);
 ASSERT_EQ(vip.stat, VALID);
 }
 
-TEST(COLLECT, format_input_data)
+TEST(COLLECT, change_the_input_data_format_to_output_format)
 { 
 	class vehicle obj;
-	struct vehicle_output vop;
+	struct vehicle_output vop = {0};
 	
 	struct input ip = {
 	.id = 2300,
@@ -33,12 +33,13 @@ TEST(COLLECT, format_input_data)
 	.stat = VALID
         };
 
-vop = obj.convert_vehicle_data_into_storage_format(vip);
+void obj.convert_vehicle_data_into_storage_format(vip, &vop);
 ASSERT_EQ(vop.id, vip.ip.id);
 ASSERT_EQ(vop.motor_temp, 0);
 ASSERT_EQ(vop.battery_temp, 40);
 ASSERT_EQ(vop.battery_soc, 0);
 }
+
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);

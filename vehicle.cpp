@@ -42,38 +42,37 @@ struct vehicle_input vehicle::get_vehicle_data(struct input ip)
 }
 
 
-struct vehicle_output vehicle::convert_vehicle_data_into_storage_format(struct vehicle_input vip)
+void vehicle::convert_vehicle_data_into_storage_format(struct vehicle_input vip, struct vehicle_output *vop)
 {
-	struct vehicle_output vop = {0};
 
 	if(vip.stat == VALID) 
 	{
 	
-	vop.id = vip.ip.id;
+	vop->id = vip.ip.id;
 	
 	switch(vip.ip.key)
 	{
 		case MOTOR_TEMP:
 			{
-				vop.motor_temp = vip.ip.measurement;
+				vop->motor_temp = vip.ip.measurement;
 			}
 			break;
 
 		case BATTERY_TEMP:
 			{
-				vop.battery_temp = vip.ip.measurement;
+				vop->battery_temp = vip.ip.measurement;
 			}
 			break;
 
 		case BATTERY_SOC:
 			{
-				vop.battery_soc = vip.ip.measurement;
+				vop->battery_soc = vip.ip.measurement;
 			}
 			break;
 	}
 
 	}
 	
-	return vop;
+	return;
 }	
 

@@ -43,7 +43,7 @@ class vehicle
 
 public:
 struct vehicle_input get_vehicle_data(struct input ip);
-struct vehicle_output convert_vehicle_data_into_storage_format(struct vehicle_input vip);
+void convert_vehicle_data_into_storage_format(struct vehicle_input vip, struct vehicle_output *vop);
 
 };
 
