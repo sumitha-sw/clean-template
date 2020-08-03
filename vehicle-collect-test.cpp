@@ -25,11 +25,12 @@ TEST(COLLECT, change_the_input_data_format_to_output_format)
 	
 	struct Input_Frame frame = {
 	.vehicle_id = 2300,
-	.key = BATTERY_TEMP,
+	.key = BATTERY_TEMPERATURE,
 	.measurement = 40
         };
+
 	struct Telematics msg = {
-	.in_frame = in_frame,
+	.in_frame = frame,
 	.status = VALID_FRAME
         };
 
