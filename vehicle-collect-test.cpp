@@ -34,7 +34,7 @@ TEST(COLLECT, change_the_input_data_format_to_output_format)
 	.status = VALID_FRAME
         };
 
-void obj.convert_input_frame_into_output_frame(msg, &output_frame);
+obj.convert_input_frame_into_output_frame(msg, &output_frame);
 ASSERT_EQ(output_frame.vehicle_id, msg.in_frame.vehicle_id);
 ASSERT_EQ(output_frame.motor_temperature, 0);
 ASSERT_EQ(output_frame.battery_temperature, 40);
