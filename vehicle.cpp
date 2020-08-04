@@ -115,14 +115,13 @@ struct Telematics Vehicle::get_input_message_frame(const struct Input_Frame fram
 
 void Vehicle::convert_input_frame_into_output_frame(const struct Telematics message, struct Inventory *output_frame)
 {
-	int i;
 
 	if(message.status == VALID_FRAME) 
 	{
 	
 	output_frame->vehicle_id = message.in_frame.vehicle_id;
 	
-	for(i=0;i <= MEASURES_AVAILABLE;i++)
+	for(int i=0;i <= MEASURES_AVAILABLE;i++)
 	{
 		if(i == message.in_frame.key)
 		{
