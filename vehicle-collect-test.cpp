@@ -34,11 +34,23 @@ TEST(COLLECT, change_the_input_data_format_to_output_format)
 	.status = VALID_FRAME
         };
 
+	struct Input_Frame frame_1 = {
+	.vehicle_id = 2300,
+	.key = BATTERY_SOC,
+	.measurement = 90
+        };
+
+	struct Telematics msg_1 = {
+	.in_frame = frame_1,
+	.status = VALID_FRAME
+        };
+
 obj.convert_input_frame_into_output_frame(msg, &output_frame);
+obj.convert_input_frame_into_output_frame(msg_1, &output_frame);
 ASSERT_EQ(output_frame.vehicle_id, msg.in_frame.vehicle_id);
 ASSERT_EQ(output_frame.motor_temperature, 0);
 ASSERT_EQ(output_frame.battery_temperature, 40);
-ASSERT_EQ(output_frame.battery_soc, 0);
+ASSERT_EQ(output_frame.battery_soc, 90);
 }
 
 
