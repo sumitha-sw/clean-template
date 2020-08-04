@@ -79,18 +79,28 @@ struct measures_table msg_table[] = {
 
 };
 
+int validate_vehicle_id(int vehicle_id)
+{
+
+	if((vehicle_id < 1000) || (vehicle_id > 9999)) {
+		return FALSE;
+	}
+
+	return TRUE;
+};
+
 struct Telematics Vehicle::get_input_message_frame(const struct Input_Frame frame)
 {
 	struct Telematics message {0};
 	message.status = INVALID_FRAME;
 	int i;
 
-	if((frame.vehicle_id < 1000) || (frame.vehicle_id > 9999)) {
-		return message;
+	if(validate_vehicle_id(frame.vehicle_id)) {
+		message.in_frame.vehicle_id = frame.vehicle_id;
 	}
 	else
 	{
-		message.in_frame.vehicle_id = frame.vehicle_id;
+		return message;
 	}
 
 	for(i=0;i <= MEASURES_AVAILABLE;i++)
