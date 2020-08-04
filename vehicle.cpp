@@ -1,13 +1,91 @@
 #include <iostream>
 #include "vehicle.h"
 
+using namespace std;
 
-struct Telematics Vehicle::get_input_message_frame(struct Input_Frame frame)
+
+int validate_motor_temperature(float measurement)
 {
-	struct Telematics message = {0};
+	if((measurement < 0) || (measurement > 300))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+int validate_battery_temperature(float measurement)
+{
+
+	if((measurement < 0) || (measurement > 200))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+int validate_battery_soc(float measurement)
+{
+	if((measurement < 0) || (measurement > 100))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+void copy_motor_temperature(struct Inventory* output_frame, float measurement)
+{
+
+    output_frame->motor_temperature = measurement;
+    
+    return;
+
+}
+
+void copy_battery_temperature(struct Inventory* output_frame, float measurement)
+{
+
+    output_frame->battery_temperature = measurement;
+    
+    return;
+
+}
+
+void copy_battery_soc(struct Inventory* output_frame, float measurement)
+{
+
+    output_frame->battery_soc = measurement;
+    
+    return;
+
+}
+
+struct measures_table msg_table[] = { 
+	{
+		.key = MOTOR_TEMPERATURE,
+		.validate_measures = validate_motor_temperature,
+		.copy_measures = copy_motor_temperature
+	},
+	{
+		.key = BATTERY_TEMPERATURE,
+		.validate_measures = validate_battery_temperature,
+		.copy_measures = copy_battery_temperature
+	},
+	{
+		.key = BATTERY_SOC,
+		.validate_measures = validate_battery_soc,
+		.copy_measures = copy_battery_soc
+	}
+
+};
+
+struct Telematics Vehicle::get_input_message_frame(const struct Input_Frame frame)
+{
+	struct Telematics message {0};
+	message.status = INVALID_FRAME;
+	int i;
 
 	if((frame.vehicle_id < 1000) || (frame.vehicle_id > 9999)) {
-		message.status = INVALID_FRAME;
 		return message;
 	}
 	else
@@ -15,60 +93,42 @@ struct Telematics Vehicle::get_input_message_frame(struct Input_Frame frame)
 		message.in_frame.vehicle_id = frame.vehicle_id;
 	}
 
-	if((frame.key >= 0) && (frame.key <=2))
+	for(i=0;i <= MEASURES_AVAILABLE;i++)
 	{
-		message.in_frame.key = frame.key;
-	}
-	else
-	{
-		message.status = INVALID_FRAME;
-		return message;
-	}
+		if(i == frame.key)
+		{
+   			if(msg_table[i].validate_measures(frame.measurement))
+			{
+				message.in_frame.key = frame.key;
+			  	message.in_frame.measurement = frame.measurement;
+				message.status = VALID_FRAME;
+				break;
+			}
+		}
 
-	if((frame.measurement < 0) || (frame.measurement > 100))
-	{
-		message.status = INVALID_FRAME;
-		return message;
 	}
-	else
-	{
-		message.in_frame.measurement = frame.measurement;
-	}
-
-	message.status = VALID_FRAME;
 
 	return message;
 
 }
 
 
-void Vehicle::convert_input_frame_into_output_frame(struct Telematics message, struct Inventory *output_frame)
+void Vehicle::convert_input_frame_into_output_frame(const struct Telematics message, struct Inventory *output_frame)
 {
+	int i = 0;
 
 	if(message.status == VALID_FRAME) 
 	{
 	
 	output_frame->vehicle_id = message.in_frame.vehicle_id;
 	
-	switch(message.in_frame.key)
+	for(i=0;i <= MEASURES_AVAILABLE;i++)
 	{
-		case MOTOR_TEMPERATURE:
-			{
-				output_frame->motor_temperature = message.in_frame.measurement;
-			}
+		if(i == message.in_frame.key)
+		{
+			msg_table[i].copy_measures(output_frame, message.in_frame.measurement);
 			break;
-
-		case BATTERY_TEMPERATURE:
-			{
-				output_frame->battery_temperature = message.in_frame.measurement;
-			}
-			break;
-
-		case BATTERY_SOC:
-			{
-				output_frame->battery_soc = message.in_frame.measurement;
-			}
-			break;
+		}
 	}
 
 	}
